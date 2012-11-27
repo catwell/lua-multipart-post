@@ -6,10 +6,10 @@ HTTP Multipart Post helper that does just that.
 
 ## Dependencies
 
-The module itself only depends on luasocket (for ltn12.)
+The module itself only depends on luasocket (for ltn12).
 
-Tests require cwtest, a JSON parser and the availability
-of [httpbin.org](http://httpbin.org).
+Tests require [cwtest](https://github.com/catwell/cwtest), a JSON parser
+and the availability of [httpbin.org](http://httpbin.org).
 
 ## Usage
 
