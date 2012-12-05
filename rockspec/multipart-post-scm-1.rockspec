@@ -26,4 +26,5 @@ build = {
          ["multipart-post"] = "multipart-post.lua",
       },
    },
+   copy_directories = {},
 }
