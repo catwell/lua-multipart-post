@@ -26,4 +26,4 @@ See [LuaSocket](http://w3.impa.br/~diego/software/luasocket/http.html)'s
 
 ## Copyright
 
-Copyright (c) 2012 Moodstocks SAS
+Copyright (c) 2012-2013 Moodstocks SAS
