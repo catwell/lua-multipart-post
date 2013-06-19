@@ -24,6 +24,22 @@ local b,c,h = H(rq)
 See [LuaSocket](http://w3.impa.br/~diego/software/luasocket/http.html)'s
 `http.request` (generic interface) for more information.
 
+## Bugs
+
+Non-ASCII part names and file names are not supported.
+According to [RFC 2388](http://tools.ietf.org/html/rfc2388):
+
+> Note that MIME headers are generally required to consist only of 7-
+> bit data in the US-ASCII character set. Hence field names should be
+> encoded according to the method in
+> [RFC 2047](http://tools.ietf.org/html/rfc2047) if they contain
+> characters outside of that set.
+
+> The sending application MAY supply a
+> file name; if the file name of the sender's operating system is not
+> in US-ASCII, the file name might be approximated, or encoded using
+> the method of [RFC 2231](http://tools.ietf.org/html/rfc2231).
+
 ## Copyright
 
 Copyright (c) 2012-2013 Moodstocks SAS
