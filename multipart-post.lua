@@ -10,13 +10,21 @@ local tprintf = function(t,p,...)
   t[#t+1] = fmt(p,...)
 end
 
-local append_string = function(r,k,v)
-  tprintf(r,"content-disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",k,v)
-end
-
-local append_data = function(r,k,fn,data,mimetype)
-  tprintf(r,"content-disposition: form-data; name=\"%s\"; ",k)
-  tprintf(r,"filename=\"%s\"\r\ncontent-type: %s\r\n\r\n",fn,mimetype)
+local append_data = function(r,k,data,extra)
+  tprintf(r,"content-disposition: form-data; name=\"%s\"",k)
+  if extra.filename then
+    tprintf(r,"; filename=\"%s\"",extra.filename)
+  end
+  if extra.content_type then
+    tprintf(r,"\r\ncontent-type: %s",extra.content_type)
+  end
+  if extra.content_transfer_encoding then
+    tprintf(
+      r,"\r\ncontent-transfer-encoding: %s",
+      extra.content_transfer_encoding
+    )
+  end
+  tprintf(r,"\r\n\r\n")
   tprintf(r,data)
   tprintf(r,"\r\n")
 end
@@ -35,10 +43,16 @@ local encode = function(t,boundary)
     tprintf(r,"--%s\r\n",boundary)
     _t = type(v)
     if _t == "string" then
-      append_string(r,k,v)
+      append_data(r,k,v,{})
     elseif _t == "table" then
-      assert(v.name and v.data,"invalid input")
-      append_data(r,k,v.name,v.data,v.mimetype or "application/octet-stream")
+      assert(v.data,"invalid input")
+      local extra = {
+        filename = v.filename or v.name,
+        content_type = v.content_type or v.mimetype
+          or "application/octet-stream",
+        content_transfer_encoding = v.content_transfer_encoding or "binary",
+      }
+      append_data(r,k,v.data,extra)
     else error(string.format("unexpected type %s",_t)) end
   end
   tprintf(r,"--%s--\r\n",boundary)
