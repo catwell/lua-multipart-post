@@ -12,12 +12,12 @@ T:start("tests")
 
 local r = {}
 local rq = mp{
-  myfile = {name = "myfilename",data = "some data"},
+  myfile = {name = "myfilename", data = "some data"},
   foo = "bar",
 }
 rq.url = "http://httpbin.org/post"
 rq.sink = ltn12.sink.table(r)
-local b,c,h = H(rq)
+local b, c, h = H(rq)
 
 T:eq( c, 200 )
 
