@@ -2,9 +2,16 @@
 
 local cwtest = require "cwtest"
 local ltn12 = require "ltn12"
-local J = (require "json").decode
 local H = (require "socket.http").request
 local mp = (require "multipart-post").gen_request
+
+local J = nil
+do -- Find a JSON parser
+  local ok, json = pcall(require, "cjson")
+  if not ok then ok, json = pcall(require, "json") end
+  J = json.decode
+  assert(ok and J, "no JSON parser found :(")
+end
 
 local T = cwtest.new()
 
