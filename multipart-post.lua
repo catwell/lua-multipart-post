@@ -37,6 +37,7 @@ local gen_boundary = function()
 end
 
 local encode = function(t, boundary)
+  boundary = boundary or gen_boundary()
   local r = {}
   local _t
   for k,v in pairs(t) do
@@ -56,7 +57,7 @@ local encode = function(t, boundary)
     else error(string.format("unexpected type %s", _t)) end
   end
   tprintf(r, "--%s--\r\n", boundary)
-  return table.concat(r)
+  return table.concat(r), boundary
 end
 
 local gen_request = function(t)
