@@ -43,4 +43,4 @@ According to [RFC 2388](http://tools.ietf.org/html/rfc2388):
 ## Copyright
 
 - Copyright (c) 2012-2013 Moodstocks SAS
-- Copyright (c) 2014 Pierre Chapuis
+- Copyright (c) 2014-2016 Pierre Chapuis
