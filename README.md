@@ -24,6 +24,14 @@ local b,c,h = H(rq)
 See [LuaSocket](http://w3.impa.br/~diego/software/luasocket/http.html)'s
 `http.request` (generic interface) for more information.
 
+If you only need to get the multipart/form-data body use `encode`:
+
+```lua
+local enc = (require "multipart-post").encode
+local body, boundary = enc{foo="bar"}
+-- use `boundary` to build the Content-Type header
+```
+
 ## Bugs
 
 Non-ASCII part names and file names are not supported.
