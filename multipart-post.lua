@@ -46,7 +46,7 @@ local encode = function(t, boundary)
     if _t == "string" then
       append_data(r, k, v, {})
     elseif _t == "table" then
-      assert(v.data, "invalid input")
+      --assert(v.data, "invalid input")
       local extra = {
         filename = v.filename or v.name,
         content_type = v.content_type or v.mimetype
@@ -54,6 +54,8 @@ local encode = function(t, boundary)
         content_transfer_encoding = v.content_transfer_encoding or "binary",
       }
       append_data(r, k, v.data, extra)
+    elseif _t == "number" then
+      append_data(r, k, v, {})
     else error(string.format("unexpected type %s", _t)) end
   end
   tprintf(r, "--%s--\r\n", boundary)
