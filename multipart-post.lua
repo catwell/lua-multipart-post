@@ -46,7 +46,7 @@ local encode = function(t, boundary)
     if _t == "string" then
       append_data(r, k, v, {})
     elseif _t == "table" then
-      --assert(v.data, "invalid input")
+      assert(v.data, "invalid input")
       local extra = {
         filename = v.filename or v.name,
         content_type = v.content_type or v.mimetype
