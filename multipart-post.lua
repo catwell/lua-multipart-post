@@ -54,6 +54,8 @@ local encode = function(t, boundary)
         content_transfer_encoding = v.content_transfer_encoding or "binary",
       }
       append_data(r, k, v.data, extra)
+    elseif _t == "number" then
+      append_data(r, k, tostring(v), {})
     else error(string.format("unexpected type %s", _t)) end
   end
   tprintf(r, "--%s--\r\n", boundary)
