@@ -7,10 +7,10 @@ local mp = (require "multipart-post").gen_request
 
 local J
 do -- Find a JSON parser
-  local ok, json = pcall(require, "cjson")
-  if not ok then ok, json = pcall(require, "json") end
-  J = json.decode
-  assert(ok and J, "no JSON parser found :(")
+    local ok, json = pcall(require, "cjson")
+    if not ok then ok, json = pcall(require, "json") end
+    J = json.decode
+    assert(ok and J, "no JSON parser found :(")
 end
 
 local T = cwtest.new()
@@ -19,8 +19,8 @@ T:start("tests")
 
 local r = {}
 local rq = mp{
-  myfile = {name = "myfilename", data = "some data"},
-  foo = "bar",
+    myfile = {name = "myfilename", data = "some data"},
+    foo = "bar",
 }
 rq.url = "http://httpbin.org/post"
 rq.sink = ltn12.sink.table(r)
