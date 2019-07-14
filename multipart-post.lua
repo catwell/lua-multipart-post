@@ -61,7 +61,7 @@ local encode = function(r, k, v, boundary)
 end
 
 local encode_source = function(k, v, boundary)
-    r = {}
+    local r = {}
     encode(r, k, v, boundary)
     return ltn12.source.string(table.concat(r))
 end
