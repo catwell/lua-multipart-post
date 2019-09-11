@@ -4,6 +4,7 @@ local cwtest = require "cwtest"
 local ltn12 = require "ltn12"
 local H = (require "socket.http").request
 local mp = (require "multipart-post").gen_request
+local enc = (require "multipart-post").encode
 
 local J
 do -- Find a JSON parser
@@ -22,7 +23,7 @@ file:seek("set", 0)
 
 local T = cwtest.new()
 
-T:start("tests")
+T:start("testing gen_request")
 
 local r = {}
 local rq = mp{
@@ -40,6 +41,26 @@ T:eq( c, 200 )
 r = J(table.concat(r))
 
 T:eq( r.files, { myfile="some data", diskfile="file data", ltn12file="ltn12 data"} )
+T:eq( r.form, {foo = "bar"} )
+T:done()
+
+T:start("testing encode")
+
+local body, boundary = enc{foo="bar"}
+r = {}
+
+b, c, h = H{
+    url = "http://httpbin.org/post",
+    source = ltn12.source.string(body),
+    method = "POST",
+    sink = ltn12.sink.table(r),
+    headers = {
+        ["content-length"] = string.len(body),
+        ["content-type"] = string.format("multipart/form-data; boundary=\"%s\"", boundary),
+    },
+}
+T:eq( c, 200 )
+r = J(table.concat(r))
 T:eq( r.form, {foo = "bar"} )
 
 T:done()

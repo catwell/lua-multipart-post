@@ -40,7 +40,7 @@ local gen_boundary = function()
   return table.concat(t)
 end
 
-local encode = function(r, k, v, boundary)
+local encode_header = function(r, k, v, boundary)
     local _t = type(v)
 
     tprintf(r, "--%s\r\n", boundary)
@@ -62,7 +62,7 @@ end
 
 local encode_source = function(k, v, boundary)
     r = {}
-    encode(r, k, v, boundary)
+    encode_header(r, k, v, boundary)
     return ltn12.source.string(table.concat(r))
 end
 
@@ -84,7 +84,7 @@ local content_length = function(t, boundary)
     local r = {}
     local data_length = 0
     for k, v in pairs(t) do
-        encode(r, k, v, boundary)
+        encode_header(r, k, v, boundary)
         data_length = data_length + data_len(v)
         tprintf(r, "\r\n")
     end
@@ -134,7 +134,7 @@ local source = function(t, boundary)
 end
 _M.source = source
 
-local gen_request = function(t)
+_M.gen_request = function(t)
     local boundary = gen_boundary()
     return {
         method = "POST",
@@ -145,6 +145,15 @@ local gen_request = function(t)
         },
     }
 end
-_M.gen_request = gen_request
+
+_M.encode = function(t, boundary)
+    boundary = boundary or gen_boundary()
+    local r = {}
+    assert(ltn12.pump.all(
+        (source(t, boundary)),
+        (ltn12.sink.table(r))
+    ))
+    return table.concat(r), boundary
+end
 
 return _M
