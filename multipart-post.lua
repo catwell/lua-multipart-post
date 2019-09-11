@@ -41,7 +41,7 @@ local gen_boundary = function()
   return table.concat(t)
 end
 
-local encode_header = function(r, k, v, boundary)
+local encode_header_to_table = function(r, k, v, boundary)
     local _t = type(v)
 
     tprintf(r, "--%s\r\n", boundary)
@@ -61,9 +61,9 @@ local encode_header = function(r, k, v, boundary)
     end
 end
 
-local encode_source = function(k, v, boundary)
+local encode_header_as_source = function(k, v, boundary)
     local r = {}
-    encode_header(r, k, v, boundary)
+    encode_header_to_table(r, k, v, boundary)
     return ltn12.source.string(table.concat(r))
 end
 
@@ -85,7 +85,7 @@ local content_length = function(t, boundary)
     local r = {}
     local data_length = 0
     for k, v in pairs(t) do
-        encode_header(r, k, v, boundary)
+        encode_header_to_table(r, k, v, boundary)
         data_length = data_length + data_len(v)
         tprintf(r, "\r\n")
     end
@@ -125,7 +125,7 @@ local source = function(t, boundary)
     local n = 1
     local sources = {}
     for k, v in pairs(t) do
-        sources[n] = encode_source(k, t[k], boundary)
+        sources[n] = encode_header_as_source(k, t[k], boundary)
         sources[n+1] = get_data_src(v)
         sources[n+2] = ltn12.source.string("\r\n")
         n = n + 3
