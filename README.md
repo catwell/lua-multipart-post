@@ -71,7 +71,13 @@ According to [RFC 2388](http://tools.ietf.org/html/rfc2388):
 
 Note that non-ASCII file names are supported since version 1.2.
 
+## Contributors
+
+- Pierre Chapuis (@catwell)
+- Cédric Deltheil (@deltheil)
+- TJ Miller (@teejaded)
+
 ## Copyright
 
 - Copyright (c) 2012-2013 Moodstocks SAS
-- Copyright (c) 2014-2016 Pierre Chapuis
+- Copyright (c) 2014-2019 Pierre Chapuis
