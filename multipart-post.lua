@@ -20,7 +20,10 @@ local section_header = function(r, k, extra)
     tprintf(r, "content-disposition: form-data; name=\"%s\"", k)
     if extra.filename then
         tprintf(r, "; filename=\"%s\"", extra.filename)
-        tprintf(r, "; filename*=%s'%s'%s", _M.CHARSET, _M.LANGUAGE, url.escape(extra.filename))
+        tprintf(
+            r, "; filename*=%s'%s'%s",
+            _M.CHARSET, _M.LANGUAGE, url.escape(extra.filename)
+        )
     end
     if extra.content_type then
         tprintf(r, "\r\ncontent-type: %s", extra.content_type)
@@ -53,7 +56,8 @@ local encode_header_to_table = function(r, k, v, boundary)
             filename = v.filename or v.name,
             content_type = v.content_type or v.mimetype
                 or "application/octet-stream",
-            content_transfer_encoding = v.content_transfer_encoding or "binary",
+            content_transfer_encoding = v.content_transfer_encoding
+                or "binary",
         }
         section_header(r, k, extra)
     else
@@ -142,7 +146,9 @@ _M.gen_request = function(t)
         source = source(t, boundary),
         headers = {
             ["content-length"] = content_length(t, boundary),
-            ["content-type"] = fmt("multipart/form-data; boundary=\"%s\"", boundary),
+            ["content-type"] = fmt(
+                "multipart/form-data; boundary=\"%s\"", boundary
+            ),
         },
     }
 end
