@@ -17,7 +17,7 @@ local tprintf = function(t, p, ...)
 end
 
 local section_header = function(r, k, extra)
-    tprintf(r, "content-disposition: form-data; name*=%s'%s'%s", _M.CHARSET, _M.LANGUAGE, url.escape(k))
+    tprintf(r, "content-disposition: form-data; name=\"%s\"", k)
     if extra.filename then
         tprintf(r, "; filename=\"%s\"", extra.filename)
         tprintf(r, "; filename*=%s'%s'%s", _M.CHARSET, _M.LANGUAGE, url.escape(extra.filename))

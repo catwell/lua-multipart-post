@@ -58,6 +58,19 @@ rq.url = "http://httpbin.org/post"
 local b,c,h = H(rq)
 ```
 
+## Bugs
+
+Non-ASCII part names are not supported.
+According to [RFC 2388](http://tools.ietf.org/html/rfc2388):
+
+> Note that MIME headers are generally required to consist only of 7-
+> bit data in the US-ASCII character set. Hence field names should be
+> encoded according to the method in
+> [RFC 2047](http://tools.ietf.org/html/rfc2047) if they contain
+> characters outside of that set.
+
+Note that non-ASCII file names are supported since version 1.2.
+
 ## Copyright
 
 - Copyright (c) 2012-2013 Moodstocks SAS
