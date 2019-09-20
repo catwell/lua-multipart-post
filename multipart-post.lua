@@ -125,7 +125,7 @@ local source = function(t, boundary)
     local n = 1
     local sources = {}
     for k, v in pairs(t) do
-        sources[n] = encode_header_as_source(k, t[k], boundary)
+        sources[n] = encode_header_as_source(k, v, boundary)
         sources[n+1] = get_data_src(v)
         sources[n+2] = ltn12.source.string("\r\n")
         n = n + 3
