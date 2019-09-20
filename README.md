@@ -32,21 +32,31 @@ local body, boundary = enc{foo="bar"}
 -- use `boundary` to build the Content-Type header
 ```
 
-## Bugs
+## Advanced Usage
 
-Non-ASCII part names and file names are not supported.
-According to [RFC 2388](http://tools.ietf.org/html/rfc2388):
+Example using ltn12 streaming via file handles
 
-> Note that MIME headers are generally required to consist only of 7-
-> bit data in the US-ASCII character set. Hence field names should be
-> encoded according to the method in
-> [RFC 2047](http://tools.ietf.org/html/rfc2047) if they contain
-> characters outside of that set.
+```lua
+local file = io.open("myfilename", "r")
+local file_length = file:seek("end")
+file:seek("set", 0)
 
-> The sending application MAY supply a
-> file name; if the file name of the sender's operating system is not
-> in US-ASCII, the file name might be approximated, or encoded using
-> the method of [RFC 2231](http://tools.ietf.org/html/rfc2231).
+local rq = mp{
+	myfile = {name = "myfilename", data = file, len = file_length},
+}
+```
+
+Example using ltn12 source streaming
+
+```lua
+ltn12 = require("socket.ltn12")
+
+local rq = mp{
+	myfile = {name = "myfilename", data = ltn12.source.string("some data"), len = string.len("some data")}
+}
+rq.url = "http://httpbin.org/post"
+local b,c,h = H(rq)
+```
 
 ## Copyright
 
