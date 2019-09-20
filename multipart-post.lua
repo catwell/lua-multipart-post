@@ -65,10 +65,14 @@ local encode_header_to_table = function(r, k, v, boundary)
     end
 end
 
-local encode_header_as_source = function(k, v, boundary)
+local encode_header_as_source = function(k, v, boundary, ctx)
     local r = {}
-    encode_header_to_table(r, k, v, boundary)
-    return ltn12.source.string(table.concat(r))
+    encode_header_to_table(r, k, v, boundary, ctx)
+    local s = table.concat(r)
+    if ctx then
+        ctx.headers_length = ctx.headers_length + #s
+    end
+    return ltn12.source.string(s)
 end
 
 local data_len = function(d)
@@ -85,17 +89,17 @@ local data_len = function(d)
     end
 end
 
-local content_length = function(t, boundary)
-    local r = {}
-    local data_length = 0
+local content_length = function(t, boundary, ctx)
+    local r = ctx and ctx.headers_length or 0
     for k, v in pairs(t) do
-        encode_header_to_table(r, k, v, boundary)
-        data_length = data_length + data_len(v)
-        tprintf(r, "\r\n")
+        if not ctx then
+            local tmp = {}
+            encode_header_to_table(tmp, k, v, boundary)
+            r = r + #table.concat(tmp)
+        end
+        r = r + data_len(v) + 2; -- `\r\n`
     end
-    tprintf(r, "--%s--\r\n", boundary)
-
-    return string.len(table.concat(r)) + data_length
+    return r + #boundary + 6; -- `--BOUNDARY--\r\n`
 end
 
 local get_data_src = function(v)
@@ -125,11 +129,10 @@ local set_ltn12_blksz = function(sz)
 end
 _M.set_ltn12_blksz = set_ltn12_blksz
 
-local source = function(t, boundary)
-    local n = 1
-    local sources = {}
+local source = function(t, boundary, ctx)
+    local sources, n = {}, 1
     for k, v in pairs(t) do
-        sources[n] = encode_header_as_source(k, v, boundary)
+        sources[n] = encode_header_as_source(k, v, boundary, ctx)
         sources[n+1] = get_data_src(v)
         sources[n+2] = ltn12.source.string("\r\n")
         n = n + 3
@@ -141,11 +144,15 @@ _M.source = source
 
 _M.gen_request = function(t)
     local boundary = gen_boundary()
+    -- This is an optimization to avoid re-encoding headers twice.
+    -- The length of the headers is stored when computing the source,
+    -- and re-used when computing the content length.
+    local ctx = {headers_length = 0}
     return {
         method = "POST",
-        source = source(t, boundary),
+        source = source(t, boundary, ctx),
         headers = {
-            ["content-length"] = content_length(t, boundary),
+            ["content-length"] = content_length(t, boundary, ctx),
             ["content-type"] = fmt(
                 "multipart/form-data; boundary=\"%s\"", boundary
             ),
