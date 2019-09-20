@@ -6,17 +6,18 @@ local _M = {}
 _M.CHARSET = "UTF-8"
 _M.LANGUAGE = ""
 
-local fmt = function(p, ...)
+local function fmt(p, ...)
     if select('#', ...) == 0 then
         return p
-    else return string.format(p, ...) end
+    end
+    return string.format(p, ...)
 end
 
-local tprintf = function(t, p, ...)
+local function tprintf(t, p, ...)
     t[#t+1] = fmt(p, ...)
 end
 
-local section_header = function(r, k, extra)
+local function section_header(r, k, extra)
     tprintf(r, "content-disposition: form-data; name=\"%s\"", k)
     if extra.filename then
         tprintf(r, "; filename=\"%s\"", extra.filename)
@@ -37,14 +38,14 @@ local section_header = function(r, k, extra)
     tprintf(r, "\r\n\r\n")
 end
 
-local gen_boundary = function()
+local function gen_boundary()
   local t = {"BOUNDARY-"}
   for i=2,17 do t[i] = string.char(math.random(65, 90)) end
   t[18] = "-BOUNDARY"
   return table.concat(t)
 end
 
-local encode_header_to_table = function(r, k, v, boundary)
+local function encode_header_to_table(r, k, v, boundary)
     local _t = type(v)
 
     tprintf(r, "--%s\r\n", boundary)
@@ -65,7 +66,7 @@ local encode_header_to_table = function(r, k, v, boundary)
     end
 end
 
-local encode_header_as_source = function(k, v, boundary, ctx)
+local function encode_header_as_source(k, v, boundary, ctx)
     local r = {}
     encode_header_to_table(r, k, v, boundary, ctx)
     local s = table.concat(r)
@@ -75,7 +76,7 @@ local encode_header_as_source = function(k, v, boundary, ctx)
     return ltn12.source.string(s)
 end
 
-local data_len = function(d)
+local function data_len(d)
     local _t = type(d)
 
     if _t == "string" then
@@ -89,7 +90,7 @@ local data_len = function(d)
     end
 end
 
-local content_length = function(t, boundary, ctx)
+local function content_length(t, boundary, ctx)
     local r = ctx and ctx.headers_length or 0
     for k, v in pairs(t) do
         if not ctx then
@@ -102,7 +103,7 @@ local content_length = function(t, boundary, ctx)
     return r + #boundary + 6; -- `--BOUNDARY--\r\n`
 end
 
-local get_data_src = function(v)
+local function get_data_src(v)
     local _t = type(v)
     if v.source then
         return v.source
@@ -123,13 +124,13 @@ local get_data_src = function(v)
     error("invalid input")
 end
 
-local set_ltn12_blksz = function(sz)
+local function set_ltn12_blksz(sz)
     assert(type(sz) == "number", "set_ltn12_blksz expects a number")
     ltn12.BLOCKSIZE = sz
 end
 _M.set_ltn12_blksz = set_ltn12_blksz
 
-local source = function(t, boundary, ctx)
+local function source(t, boundary, ctx)
     local sources, n = {}, 1
     for k, v in pairs(t) do
         sources[n] = encode_header_as_source(k, v, boundary, ctx)
@@ -142,7 +143,7 @@ local source = function(t, boundary, ctx)
 end
 _M.source = source
 
-_M.gen_request = function(t)
+function _M.gen_request(t)
     local boundary = gen_boundary()
     -- This is an optimization to avoid re-encoding headers twice.
     -- The length of the headers is stored when computing the source,
@@ -160,7 +161,7 @@ _M.gen_request = function(t)
     }
 end
 
-_M.encode = function(t, boundary)
+function _M.encode(t, boundary)
     boundary = boundary or gen_boundary()
     local r = {}
     assert(ltn12.pump.all(
