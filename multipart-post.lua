@@ -1,9 +1,6 @@
 local ltn12 = require "ltn12"
 local url = require "socket.url"
-
---luacheck: push ignore 143
 local unpack = table.unpack or unpack
---luacheck: pop
 
 local _M = {}
 

@@ -76,8 +76,9 @@ Note that non-ASCII file names are supported since version 1.2.
 - Pierre Chapuis (@catwell)
 - Cédric Deltheil (@deltheil)
 - TJ Miller (@teejaded)
+- Rami Sabbagh (@RamiLego4Game)
 
 ## Copyright
 
 - Copyright (c) 2012-2013 Moodstocks SAS
-- Copyright (c) 2014-2019 Pierre Chapuis
+- Copyright (c) 2014-2020 Pierre Chapuis
