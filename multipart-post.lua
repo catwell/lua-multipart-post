@@ -156,7 +156,7 @@ function _M.gen_request(t)
         headers = {
             ["content-length"] = content_length(t, boundary, ctx),
             ["content-type"] = fmt(
-                "multipart/form-data; boundary=\"%s\"", boundary
+                "multipart/form-data; boundary=%s", boundary
             ),
         },
     }
