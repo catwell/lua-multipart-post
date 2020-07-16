@@ -14,11 +14,12 @@ and the availability of [httpbin.org](http://httpbin.org).
 ## Usage
 
 ```lua
-local mp = (require "multipart-post").gen_request
-local H = (require "socket.http").request
-local rq = mp{myfile = {name = "myfilename", data = "some data"}}
+local mp = require "multipart-post"
+local http = require "socket.http"
+
+local rq = mp.gen_request({myfile = {name = "myfilename", data = "some data"}})
 rq.url = "http://httpbin.org/post"
-local b,c,h = H(rq)
+local b, c, h = http.request(rq)
 ```
 
 See [LuaSocket](http://w3.impa.br/~diego/software/luasocket/http.html)'s
@@ -27,8 +28,7 @@ See [LuaSocket](http://w3.impa.br/~diego/software/luasocket/http.html)'s
 If you only need to get the multipart/form-data body use `encode`:
 
 ```lua
-local enc = (require "multipart-post").encode
-local body, boundary = enc{foo="bar"}
+local body, boundary = mp.encode({foo = "bar"})
 -- use `boundary` to build the Content-Type header
 ```
 
@@ -41,21 +41,29 @@ local file = io.open("myfilename", "r")
 local file_length = file:seek("end")
 file:seek("set", 0)
 
-local rq = mp{
-	myfile = {name = "myfilename", data = file, len = file_length},
-}
+local rq = mp.gen_request({
+	myfile = {
+        name = "myfilename",
+        data = file,
+        len = file_length,
+    }
+})
 ```
 
 Example using ltn12 source streaming
 
 ```lua
-ltn12 = require("socket.ltn12")
+local ltn12 = require "socket.ltn12"
 
-local rq = mp{
-	myfile = {name = "myfilename", data = ltn12.source.string("some data"), len = string.len("some data")}
-}
+local rq = mp.gen_request({
+	myfile = {
+        name = "myfilename",
+        data = ltn12.source.string("some data"),
+        len = string.len("some data"),
+    }
+})
 rq.url = "http://httpbin.org/post"
-local b,c,h = H(rq)
+local b, c, h = http.request(rq)
 ```
 
 ## Bugs
