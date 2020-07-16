@@ -77,6 +77,7 @@ Note that non-ASCII file names are supported since version 1.2.
 - Cédric Deltheil (@deltheil)
 - TJ Miller (@teejaded)
 - Rami Sabbagh (@RamiLego4Game)
+- @Gowa2017
 
 ## Copyright
 
