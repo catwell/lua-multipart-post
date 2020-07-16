@@ -81,11 +81,11 @@ Note that non-ASCII file names are supported since version 1.2.
 
 ## Contributors
 
-- Pierre Chapuis (@catwell)
-- Cédric Deltheil (@deltheil)
-- TJ Miller (@teejaded)
-- Rami Sabbagh (@RamiLego4Game)
-- @Gowa2017
+- Pierre Chapuis ([@catwell](https://github.com/catwell))
+- Cédric Deltheil ([@deltheil](https://github.com/deltheil))
+- TJ Miller ([@teejaded](https://github.com/teejaded))
+- Rami Sabbagh ([@RamiLego4Game](https://github.com/RamiLego4Game))
+- [@Gowa2017](https://github.com/Gowa2017)
 
 ## Copyright
 
