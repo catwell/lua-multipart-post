@@ -42,7 +42,7 @@ local file_length = file:seek("end")
 file:seek("set", 0)
 
 local rq = mp.gen_request({
-	myfile = {
+    myfile = {
         name = "myfilename",
         data = file,
         len = file_length,
@@ -56,7 +56,7 @@ Example using ltn12 source streaming
 local ltn12 = require "socket.ltn12"
 
 local rq = mp.gen_request({
-	myfile = {
+    myfile = {
         name = "myfilename",
         data = ltn12.source.string("some data"),
         len = string.len("some data"),
@@ -90,4 +90,4 @@ Note that non-ASCII file names are supported since version 1.2.
 ## Copyright
 
 - Copyright (c) 2012-2013 Moodstocks SAS
-- Copyright (c) 2014-2020 Pierre Chapuis
+- Copyright (c) 2014-2022 Pierre Chapuis
