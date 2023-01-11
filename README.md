@@ -1,5 +1,7 @@
 # multipart-post
 
+![CI Status](https://github.com/catwell/lua-multipart-post/actions/workflows/ci.yml/badge.svg?branch=master)
+
 ## Presentation
 
 HTTP Multipart Post helper that does just that.
