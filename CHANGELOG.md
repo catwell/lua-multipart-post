@@ -17,6 +17,6 @@
 
 - [Fix Lua 5.1 / LuaJIT support](https://github.com/catwell/lua-multipart-post/pull/6)
 
-## Next release
+## 1.4
 
 - [Boundary no longer enclosed in quotes in Content-Type header](https://github.com/catwell/lua-multipart-post/pull/7). This avoids bugs in some Web servers.
