@@ -1,3 +1,5 @@
+rockspec_format = "3.0"
+
 package = "multipart-post"
 version = "scm-1"
 
@@ -23,4 +25,14 @@ build = {
     type = "none",
     install = { lua = { ["multipart-post"] = "multipart-post.lua" } },
     copy_directories = {},
+}
+
+test_dependencies = {
+    "cwtest",
+    "luajson",
+}
+
+test = {
+   type = "command",
+   script = "multipart-post.test.lua",
 }

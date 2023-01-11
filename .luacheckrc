@@ -1,2 +1,3 @@
 stds.mycompat = {globals={'unpack'}}
-std = "lua53+mycompat"
+std = "lua54+mycompat"
+exclude_files = { ".lua/*" }
