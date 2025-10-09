@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: luacheck
         uses: lunarmodules/luacheck@v1
@@ -14,11 +14,14 @@ jobs:
   tests:
     strategy:
       matrix:
-        lua-version: ["5.1.5", "5.2.4", "5.3.6", "5.4.4"]
+        lua-version: ["5.1.5", "5.2.4", "5.3.6", "5.4.8"]
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
+
+      - name: install readline
+        run: sudo apt-get install -y libreadline-dev
 
       - name: localua
         run: |
