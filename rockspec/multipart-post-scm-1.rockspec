@@ -29,7 +29,7 @@ build = {
 
 test_dependencies = {
     "cwtest",
-    "luajson",
+    "lunajson",
 }
 
 test = {

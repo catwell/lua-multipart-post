@@ -7,7 +7,7 @@ local enc = (require "multipart-post").encode
 local J
 do -- Find a JSON parser
     local ok, json = pcall(require, "cjson")
-    if not ok then ok, json = pcall(require, "json") end
+    if not ok then ok, json = pcall(require, "lunajson") end
     J = json.decode
     assert(ok and J, "no JSON parser found :(")
 end
