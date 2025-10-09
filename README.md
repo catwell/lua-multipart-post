@@ -68,6 +68,15 @@ rq.url = "http://httpbin.org/post"
 local b, c, h = http.request(rq)
 ```
 
+Example setting extra headers (here Authorization):
+
+```lua
+local rq = mp.gen_request({myfile = {name = "myfilename", data = "some data"}})
+rq.url = "http://httpbin.org/post"
+rq.headers.Authorization = "Bearer SomeToken42"
+local b, c, h = http.request(rq)
+```
+
 ## Bugs
 
 Non-ASCII part names are not supported.
@@ -91,5 +100,5 @@ Note that non-ASCII file names are supported since version 1.2.
 
 ## Copyright
 
-- Copyright (c) 2012-2013 Moodstocks SAS
-- Copyright (c) 2014-2022 Pierre Chapuis
+- Copyright (c) 2012 - 2013 Moodstocks SAS
+- Copyright (c) since 2014 Pierre Chapuis

@@ -33,6 +33,7 @@ T:start("gen_request"); do
         },
         foo = "bar",
     }
+    rq.headers.Authorization = "Bearer SomeToken42"
 
     rq.url = "http://httpbin.org/post"
     rq.sink = ltn12.sink.table(r)
@@ -47,6 +48,7 @@ T:start("gen_request"); do
         ltn12file="ltn12 data"
     })
     T:eq(r.form, {foo = "bar"})
+    T:eq(r.headers.Authorization, "Bearer SomeToken42")
 end; T:done()
 
 T:start("encode"); do
